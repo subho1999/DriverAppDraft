@@ -31,4 +31,5 @@
     <string name="enter_email_editText">Enter your email</string>
     <string name="enter_pass_textView">Password: </string>
     <string name="login_textView_email">Email</string>
+    <string name="login_button">Login to Firebase</string>
 </resources>
