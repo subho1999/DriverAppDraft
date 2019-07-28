@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "115350023436",
+    "firebase_url": "https://driverappdraft.firebaseio.com",
+    "project_id": "driverappdraft",
+    "storage_bucket": "driverappdraft.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115350023436:android:d856575e41fa0ecc",
+        "android_client_info": {
+          "package_name": "com.viit.driverappdraft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "115350023436-1omneto51k74vqig4emcglsrsimacqv1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.viit.driverappdraft",
+            "certificate_hash": "a1c74b98341030d4335562771b17d5269e19f285"
+          }
+        },
+        {
+          "client_id": "115350023436-2rhvavrrdl69hboteovov4f98d37ah3d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8LrnFIhnnkjt016cpPpXtSAI-2m45v08"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "115350023436-2rhvavrrdl69hboteovov4f98d37ah3d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">DriverAppDraft</string>
+    <string name="route_select_textView">Route: </string>
+    <string name="route_select_prompt">Select Route</string>
+    <string name="driver_select_prompt">Select Driver</string>
+    <string-array name="routes_array">
+        <item>Route 1</item>
+        <item>Route 2</item>
+        <item>Route 3</item>
+    </string-array>
+    <string-array name="drivers_route1_array">
+        <item>Driver 1</item>
+        <item>Driver 2</item>
+        <item>Driver 3</item>
+    </string-array>
+    <string-array name="drivers_route2_array">
+        <item>Driver 1</item>
+        <item>Driver 2</item>
+    </string-array>
+    <string-array name="drivers_route3_array">
+        <item>Driver 1</item>
+        <item>Driver 2</item>
+        <item>Driver 3</item>
+        <item>Driver 4</item>
+    </string-array>
+    <string name="driver_select_textView">Driver: </string>
+    <string name="button_login">Login</string>
+    <string name="driver_mail">drivermail2@vit.ac.in</string>
+    <string name="driver_password">driverpassword2</string>
+    <string name="enter_email_textView">Email: </string>
+    <string name="enter_email_editText">Enter your email</string>
+    <string name="enter_pass_textView">Password: </string>
+    <string name="login_textView_email">Email</string>
+</resources>
