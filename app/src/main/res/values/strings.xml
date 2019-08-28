@@ -24,12 +24,9 @@
         <item>Driver 4</item>
     </string-array>
     <string name="driver_select_textView">Driver: </string>
-    <string name="button_login">Login</string>
-    <string name="driver_mail">drivermail2@vit.ac.in</string>
-    <string name="driver_password">driverpassword2</string>
-    <string name="enter_email_textView">Email: </string>
-    <string name="enter_email_editText">Enter your email</string>
-    <string name="enter_pass_textView">Password: </string>
-    <string name="login_textView_email">Email</string>
+    <string name="button_select_bus">Start Driving</string>
+    <string name="email_Hint">Email</string>
     <string name="login_button">Login to Firebase</string>
+    <string name="password_Hint">Password</string>
+    <string name="button_stop_driving">Stop Driving</string>
 </resources>

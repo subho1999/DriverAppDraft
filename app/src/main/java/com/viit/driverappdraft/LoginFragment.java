@@ -37,7 +37,7 @@ public class LoginFragment extends Fragment implements AdapterView.OnItemSelecte
     private static final int PERMISSION_REQUEST = 100;
     public static final String ARG_FIREBASE_URL = "reference_url";
 
-    Button mLoginButton;
+    Button mLoginButton, mLogoutButton;
     Spinner mSpinnerRoute, mSpinnerDriver;
     ArrayList<String> mRoutesArray;
     ArrayList<String> mDriversRoute1Array;
@@ -49,19 +49,28 @@ public class LoginFragment extends Fragment implements AdapterView.OnItemSelecte
     FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     DatabaseReference mRootref = mDatabase.getReference();
     public DatabaseReference mChildRef;
-    @Nullable
+
     @Override
-    public View onCreateView (@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_login, container, false);
-        mLoginButton = v.findViewById(R.id.login_button);
+    public void onCreate(@Nullable Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
         mRoutesArray = new ArrayList<>(Arrays.asList(this.getResources().getStringArray(R.array.routes_array)));
         mDriversRoute1Array = new ArrayList<>(Arrays.asList(this.getResources().getStringArray(R.array.drivers_route1_array)));
         mDriversRoute2Array = new ArrayList<>(Arrays.asList(this.getResources().getStringArray(R.array.drivers_route2_array)));
         mDriversRoute3Array = new ArrayList<>(Arrays.asList(this.getResources().getStringArray(R.array.drivers_route3_array)));
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView (@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_login, container, false);
+        mLoginButton = v.findViewById(R.id.confirm_bus);
+        mLogoutButton = v.findViewById(R.id.stop_bus);
+
         mSpinnerRoute = v.findViewById(R.id.spinner_routes);
         mSpinnerDriver = v.findViewById(R.id.spinner_drivers);
         mSpinnerRoute.setPrompt(getString(R.string.route_select_prompt));
         mSpinnerDriver.setPrompt(getString(R.string.driver_select_prompt));
+
         mRoutesAdapter = new ArrayAdapter<>(Objects.requireNonNull(this.getActivity()), R.layout.spinner_ui, mRoutesArray);
         mRoutesAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         mSpinnerRoute.setAdapter(mRoutesAdapter);
@@ -99,7 +108,15 @@ public class LoginFragment extends Fragment implements AdapterView.OnItemSelecte
                 mLoginButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        loginToFirebase();
+                        selectChildReference();
+                    }
+                });
+                mLogoutButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent serviceIntent = new Intent(getActivity(), TrackingService.class);
+                        Objects.requireNonNull(getActivity()).stopService(serviceIntent);
+                        Log.i("GPSservice", "service stopped");
                     }
                 });
                 break;
@@ -110,74 +127,62 @@ public class LoginFragment extends Fragment implements AdapterView.OnItemSelecte
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
-    private void loginToFirebase(){
-        String email = getString(R.string.driver_mail);
-        String password = getString(R.string.driver_password);
-        //Toast.makeText(getActivity(), "Method opened", Toast.LENGTH_SHORT).show();
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(getActivity(), "Successfully logged in to Firebase", Toast.LENGTH_SHORT).show();
-                    switch(mSpinnerRoute.getSelectedItem().toString()){
-                        case "Route 1":
-                            switch (mSpinnerDriver.getSelectedItem().toString()){
-                                case "Driver 1":
-                                    mChildRef = mRootref.child("Route_1").child("Driver_1");
-                                    break;
-                                case "Driver 2":
-                                    mChildRef = mRootref.child("Route_1").child("Driver_2");
-                                    break;
-                                case "Driver 3":
-                                    mChildRef = mRootref.child("Route_1").child("Driver_3");
-                                    break;
-                            }
-                            break;
-                        case "Route 2":
-                            switch (mSpinnerDriver.getSelectedItem().toString()){
-                                case "Driver 1":
-                                    mChildRef = mRootref.child("Route_2").child("Driver_1");
-                                    break;
-                                case "Driver 2":
-                                    mChildRef = mRootref.child("Route_2").child("Driver_2");
-                                    break;
-                            }
-                            break;
-                        case "Route 3":
-                            switch (mSpinnerDriver.getSelectedItem().toString()){
-                                case "Driver 1":
-                                    mChildRef = mRootref.child("Route_3").child("Driver_1");
-                                    break;
-                                case "Driver 2":
-                                    mChildRef = mRootref.child("Route_3").child("Driver_2");
-                                    break;
-                                case "Driver 3":
-                                    mChildRef = mRootref.child("Route_3").child("Driver_3");
-                                    break;
-                                case "Driver 4":
-                                    mChildRef = mRootref.child("Route_3").child("Driver_4");
-                                    break;
-                            }
-                            break;
-                    }
-
-                    LocationManager locationManager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(Context.LOCATION_SERVICE);
-                    if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        getActivity().finish();
-                    }
-
-                    int permission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
-                    if(permission == PackageManager.PERMISSION_GRANTED){
-                        startTrackerService();
-                    } else {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
-                    }
-
-                }else{
-                    Log.d("asdf", "Authentication error");
+    private void selectChildReference(){
+        switch(mSpinnerRoute.getSelectedItem().toString()){
+            case "Route 1":
+                switch (mSpinnerDriver.getSelectedItem().toString()){
+                    case "Driver 1":
+                        mChildRef = mRootref.child("Route_1").child("Driver_1");
+                        break;
+                    case "Driver 2":
+                        mChildRef = mRootref.child("Route_1").child("Driver_2");
+                        break;
+                    case "Driver 3":
+                        mChildRef = mRootref.child("Route_1").child("Driver_3");
+                        break;
                 }
-            }
-        });
+                break;
+            case "Route 2":
+                switch (mSpinnerDriver.getSelectedItem().toString()){
+                    case "Driver 1":
+                        mChildRef = mRootref.child("Route_2").child("Driver_1");
+                        break;
+                    case "Driver 2":
+                        mChildRef = mRootref.child("Route_2").child("Driver_2");
+                        break;
+                }
+                break;
+            case "Route 3":
+                switch (mSpinnerDriver.getSelectedItem().toString()){
+                    case "Driver 1":
+                        mChildRef = mRootref.child("Route_3").child("Driver_1");
+                        break;
+                    case "Driver 2":
+                        mChildRef = mRootref.child("Route_3").child("Driver_2");
+                        break;
+                    case "Driver 3":
+                        mChildRef = mRootref.child("Route_3").child("Driver_3");
+                        break;
+                    case "Driver 4":
+                        mChildRef = mRootref.child("Route_3").child("Driver_4");
+                        break;
+                }
+                break;
+        }
+
+        mChildRef.child("Online").setValue(true);
+
+        LocationManager locationManager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(Context.LOCATION_SERVICE);
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            getActivity().finish();
+        }
+
+        int permission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+        if(permission == PackageManager.PERMISSION_GRANTED){
+            startTrackerService();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
+        }
     }
 
     private void startTrackerService(){

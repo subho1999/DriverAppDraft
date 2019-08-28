@@ -16,7 +16,7 @@ public class MainActivity extends FragmentActivity {
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
         if(fragment == null){
-            fragment = new LoginFragment();
+            fragment = new SigninFragment();
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
     }

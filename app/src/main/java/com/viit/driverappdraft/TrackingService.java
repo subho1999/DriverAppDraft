@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -42,6 +43,12 @@ public class TrackingService extends Service {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    @Override
+    public void onDestroy() {
+        mChildRef.child("Online").setValue(false);
+        Toast.makeText(this, "GPS Tracking Disabled", Toast.LENGTH_SHORT).show();
     }
 
     protected BroadcastReceiver stopReceiver = new BroadcastReceiver() {
