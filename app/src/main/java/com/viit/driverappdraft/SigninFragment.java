@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 public class SigninFragment extends Fragment {
 
     EditText mEmailEditText, mPasswordEditText;
@@ -45,7 +47,7 @@ public class SigninFragment extends Fragment {
                             if(task.isSuccessful()) {
                                 Toast.makeText(getActivity(), "Successfully logged in to Firebase", Toast.LENGTH_SHORT).show();
                                 LoginFragment loginFragment = new LoginFragment();
-                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, loginFragment, "loginFragment Transaction").addToBackStack(null).commit();
+                                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, loginFragment, "loginFragment Transaction").addToBackStack(null).commit();
                             } else {
                                 Log.e("Firebase", "Authentication error");
                             }
